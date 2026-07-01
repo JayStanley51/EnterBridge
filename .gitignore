@@ -1,0 +1,21 @@
+## .NET / ASP.NET Core
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+publish/
+*.nupkg
+*.snupkg
+*.log
+
+## Secrets / environment
+appsettings.Development.json
+*.env
+secrets.json
+
+## OS
+.DS_Store
+Thumbs.db
