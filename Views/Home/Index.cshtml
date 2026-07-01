@@ -1,8 +1,102 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@{
+    ViewData["Title"] = "Login";
+    Layout = null;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - EnterBridge</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <style>
+        body {
+            background-color: #f0f2f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .login-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
+            padding: 2.5rem 2.5rem 2rem;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-card h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 0.25rem;
+        }
+
+        .login-card .subtitle {
+            color: #6c757d;
+            font-size: 0.95rem;
+            margin-bottom: 1.75rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-select {
+            border-radius: 8px;
+            padding: 0.65rem 1rem;
+            font-size: 1rem;
+            border-color: #ced4da;
+        }
+
+        .form-select:focus {
+            border-color: #4361ee;
+            box-shadow: 0 0 0 0.2rem rgba(67, 97, 238, 0.2);
+        }
+
+        .btn-login {
+            background-color: #4361ee;
+            border: none;
+            border-radius: 8px;
+            padding: 0.7rem;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            transition: background-color 0.2s;
+        }
+
+        .btn-login:hover {
+            background-color: #3451d1;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <h1>EnterBridge</h1>
+        <p class="subtitle">Select your role to continue</p>
+
+        <form method="post" asp-action="Login">
+            <div class="mb-4">
+                <label for="role" class="form-label">Role</label>
+                <select id="role" name="role" class="form-select">
+                    <option value="Foreman">Foreman</option>
+                    <option value="Purchaser">Purchaser</option>
+                    <option value="Purchaser2">Purchaser2</option>
+                    <option value="Purchaser3">Purchaser3</option>
+                </select>
+            </div>
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary btn-login">Login</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

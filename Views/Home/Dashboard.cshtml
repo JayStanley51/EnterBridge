@@ -1,0 +1,26 @@
+@{
+    ViewData["Title"] = "Home";
+}
+
+<div class="text-center mt-4">
+    <h1 class="display-5">Welcome, @ViewData["Role"]</h1>
+    <p class="text-muted">You are logged in as <strong>@ViewData["Role"]</strong>.</p>
+
+    <div class="mt-4 d-flex flex-column align-items-center gap-3">
+        <a asp-controller="Order" asp-action="Index" class="btn btn-success btn-lg">
+            New Order
+        </a>
+        <a asp-controller="Order" asp-action="History" class="btn btn-secondary btn-lg position-relative">
+            Order History
+            @if (ViewData["PendingApprovals"] is int pending && pending > 0)
+            {
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    @pending
+                </span>
+            }
+        </a>
+        <a asp-controller="Products" asp-action="Index" class="btn btn-primary btn-lg">
+            View Products
+        </a>
+    </div>
+</div>

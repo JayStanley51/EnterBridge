@@ -1,0 +1,174 @@
+@model List<EnterBridgePOC.Models.ProductWithPricesViewModel>
+
+@{
+    ViewData["Title"] = "Products";
+    int groupIndex = 0;
+    int productIndex = 0;
+}
+
+@section Scripts {
+<script>
+    document.querySelectorAll('[data-bs-toggle="collapse"]').forEach(btn => {
+        const target = document.querySelector(btn.dataset.bsTarget);
+        target.addEventListener('show.bs.collapse', () => btn.querySelector('.chevron').textContent = '▲');
+        target.addEventListener('hide.bs.collapse', () => btn.querySelector('.chevron').textContent = '▼');
+    });
+
+    document.getElementById('skuSearch').addEventListener('input', function () {
+        const term = this.value.trim().toLowerCase();
+        document.querySelectorAll('.category-section').forEach(section => {
+            let anyVisible = false;
+            section.querySelectorAll('tbody tr.product-row').forEach(row => {
+                const sku = row.querySelector('.sku-cell')?.textContent.trim().toLowerCase() ?? '';
+                const match = !term || sku.includes(term);
+                row.style.display = match ? '' : 'none';
+                const priceRow = row.nextElementSibling;
+                if (priceRow && priceRow.classList.contains('collapse'))
+                    priceRow.style.display = match ? '' : 'none';
+                if (match) anyVisible = true;
+            });
+            section.style.display = anyVisible || !term ? '' : 'none';
+            if (term && anyVisible) {
+                const collapse = section.querySelector('.collapse');
+                if (collapse && !collapse.classList.contains('show'))
+                    new bootstrap.Collapse(collapse, { show: true });
+            }
+        });
+    });
+</script>
+}
+
+<div class="mb-3">
+    <input id="skuSearch" type="search" class="form-control" placeholder="Search by SKU..." />
+</div>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Products</h2>
+    <a asp-controller="Home" asp-action="Dashboard" class="btn btn-outline-secondary">← Back</a>
+</div>
+
+@if (Model == null || Model.Count == 0)
+{
+    <p class="text-muted">No products found.</p>
+}
+else
+{
+    <p class="text-muted">@Model.Count product(s)</p>
+
+    @foreach (var group in Model.GroupBy(vm => vm.Product.Category).OrderBy(g => g.Key.ToString()))
+    {
+        var collapseId = $"category-{groupIndex++}";
+        <div class="mt-3 category-section">
+            <button class="btn btn-light w-100 text-start d-flex justify-content-between align-items-center border"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#@collapseId"
+                    aria-expanded="false">
+                <span class="fw-semibold">@group.Key <span class="text-muted fw-normal fs-6">(@group.Count())</span></span>
+                <span class="chevron">▼</span>
+            </button>
+            <div class="collapse" id="@collapseId">
+                <div class="table-responsive mb-2">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-dark">
+                            <tr>
+                                <th style="width:2rem"></th>
+                                <th>Name</th>
+                                <th>SKU</th>
+                                <th>Description</th>
+                                <th>Latest Price</th>
+                                <th>Trend</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var vm in group)
+                            {
+                                var priceCollapseId = $"prices-{productIndex++}";
+
+                                string trendIcon = "—";
+                                string trendClass = "text-muted";
+                                string trendLabel = "";
+                                if (vm.Prices.Count >= 3)
+                                {
+                                    var newest = vm.Prices[0].Amount;
+                                    var oldest = vm.Prices[2].Amount;
+                                    var diff = newest - oldest;
+                                    var pct = oldest != 0 ? diff / oldest * 100 : 0;
+                                    trendLabel = $"{(diff >= 0 ? "+" : "")}{pct:F1}%";
+                                    if (diff > 0)      { trendIcon = "▲"; trendClass = "text-danger"; }
+                                    else if (diff < 0) { trendIcon = "▼"; trendClass = "text-success"; }
+                                    else               { trendIcon = "→"; trendClass = "text-muted"; }
+                                }
+
+                                <tr class="table-light product-row">
+                                    <td>
+                                        @if (vm.Prices.Count > 0)
+                                        {
+                                            <button class="btn btn-sm btn-outline-secondary py-0 px-1"
+                                                    type="button"
+                                                    data-bs-toggle="collapse"
+                                                    data-bs-target="#@priceCollapseId"
+                                                    aria-expanded="false">
+                                                <span class="chevron">▼</span>
+                                            </button>
+                                        }
+                                    </td>
+                                    <td class="fw-semibold">@vm.Product.Name</td>
+                                    <td><code class="sku-cell">@vm.Product.Sku</code></td>
+                                    <td class="text-muted">@vm.Product.Description</td>
+                                    <td>
+                                        @if (vm.Prices.Count > 0)
+                                        {
+                                            var latest = vm.Prices[0];
+                                            <span>@latest.Amount.ToString("C") / @latest.UnitOfMeasure</span>
+                                            <small class="text-muted ms-1">(@latest.DateTime.ToString("yyyy-MM-dd"))</small>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">—</span>
+                                        }
+                                    </td>
+                                    <td class="@trendClass fw-semibold">
+                                        @trendIcon
+                                        @if (!string.IsNullOrEmpty(trendLabel))
+                                        {
+                                            <small class="fw-normal ms-1">@trendLabel</small>
+                                        }
+                                    </td>
+                                </tr>
+                                @if (vm.Prices.Count > 0)
+                                {
+                                    <tr class="collapse" id="@priceCollapseId">
+                                        <td colspan="6" class="p-0 ps-4 bg-white">
+                                            <table class="table table-sm table-striped mb-0">
+                                                <thead class="table-secondary">
+                                                    <tr>
+                                                        <th>Date</th>
+                                                        <th>Amount</th>
+                                                        <th>Quantity</th>
+                                                        <th>Unit</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var price in vm.Prices)
+                                                    {
+                                                        <tr>
+                                                            <td>@price.DateTime.ToString("yyyy-MM-dd")</td>
+                                                            <td>@price.Amount.ToString("C")</td>
+                                                            <td>@price.Quantity</td>
+                                                            <td>@price.UnitOfMeasure</td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+}

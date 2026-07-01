@@ -1,0 +1,41 @@
+@model EnterBridgePOC.Models.Order
+
+@{
+    ViewData["Title"] = "Order Confirmed";
+}
+
+<div class="text-center mt-4 mb-4">
+    <h2 class="text-success">Order Placed</h2>
+    <p class="text-muted">Order #@Model.Id &mdash; @Model.PlacedAt.ToString("yyyy-MM-dd HH:mm") &mdash; @Model.Role</p>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>Name</th>
+                <th>SKU</th>
+                <th>Qty</th>
+                <th>Price at Order</th>
+                <th>Line Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td><code>@item.Sku</code></td>
+                    <td>@item.Quantity</td>
+                    <td>@item.PriceAtOrder.ToString("C") / @item.UnitOfMeasure</td>
+                    <td>@((item.PriceAtOrder * item.Quantity).ToString("C"))</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="d-flex gap-2 mt-3">
+    <a asp-controller="Order" asp-action="Index" class="btn btn-primary">New Order</a>
+    <a asp-controller="Home" asp-action="Dashboard" class="btn btn-outline-secondary">Dashboard</a>
+</div>

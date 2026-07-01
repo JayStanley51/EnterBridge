@@ -1,0 +1,73 @@
+@model List<EnterBridgePOC.Models.Order>
+
+@{
+    ViewData["Title"] = "Order History";
+    int orderIndex = 0;
+    bool isForeman = ViewData["Role"]?.ToString() == "Foreman";
+
+    var activeOrders = isForeman
+        ? Model.Where(o => o.Status != EnterBridgePOC.Models.ApprovalStatus.Approved).ToList()
+        : Model.ToList();
+    var approvedOrders = isForeman
+        ? Model.Where(o => o.Status == EnterBridgePOC.Models.ApprovalStatus.Approved).ToList()
+        : new List<EnterBridgePOC.Models.Order>();
+}
+
+@section Scripts {
+<script>
+    document.querySelectorAll('[data-bs-toggle="collapse"]').forEach(btn => {
+        const target = document.querySelector(btn.dataset.bsTarget);
+        target.addEventListener('show.bs.collapse', () => btn.querySelector('.chevron').textContent = '▲');
+        target.addEventListener('hide.bs.collapse', () => btn.querySelector('.chevron').textContent = '▼');
+    });
+</script>
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Order History</h2>
+    <a asp-controller="Home" asp-action="Dashboard" class="btn btn-outline-secondary">← Back</a>
+</div>
+
+@if (Model == null || Model.Count == 0)
+{
+    <p class="text-muted">No orders placed yet.</p>
+}
+else
+{
+    @* ── Active orders ── *@
+    @if (activeOrders.Count == 0)
+    {
+        <p class="text-muted">No pending or rejected orders.</p>
+    }
+    else
+    {
+        <p class="text-muted">@activeOrders.Count order(s)</p>
+        @foreach (var order in activeOrders)
+        {
+            var collapseId = $"order-{orderIndex++}";
+            @await Html.PartialAsync("_OrderRow", order, new ViewDataDictionary(ViewData) { ["CollapseId"] = collapseId, ["IsForeman"] = isForeman })
+        }
+    }
+
+    @* ── Approved orders (Foreman only, collapsed by default) ── *@
+    @if (isForeman && approvedOrders.Count > 0)
+    {
+        <div class="mt-4">
+            <button class="btn btn-light w-100 text-start d-flex justify-content-between align-items-center border"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#approved-section"
+                    aria-expanded="false">
+                <span class="fw-semibold text-success">Approved Orders <span class="text-muted fw-normal fs-6">(@approvedOrders.Count)</span></span>
+                <span class="chevron">▼</span>
+            </button>
+            <div class="collapse" id="approved-section">
+                @foreach (var order in approvedOrders)
+                {
+                    var collapseId = $"order-{orderIndex++}";
+                    @await Html.PartialAsync("_OrderRow", order, new ViewDataDictionary(ViewData) { ["CollapseId"] = collapseId, ["IsForeman"] = isForeman })
+                }
+            </div>
+        </div>
+    }
+}
