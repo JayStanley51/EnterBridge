@@ -1,0 +1,97 @@
+@model List<EnterBridgePOC.Models.OrderItem>
+
+@{
+    ViewData["Title"] = "Your Cart";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Your Cart</h2>
+    <a asp-controller="Order" asp-action="Index" class="btn btn-outline-secondary">← Continue Shopping</a>
+</div>
+
+@if (Model == null || Model.Count == 0)
+{
+    <p class="text-muted">Your cart is empty.</p>
+}
+else
+{
+    <form method="post" asp-action="UpdateCart" asp-controller="Order">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Name</th>
+                        <th>SKU</th>
+                        <th>Price</th>
+                        <th style="width:120px">Quantity</th>
+                        <th>Line Total</th>
+                        <th>Remove</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.Count; i++)
+                    {
+                        var item = Model[i];
+                        <tr id="row-@i">
+                            <input type="hidden" name="Items[@i].ProductId"    value="@item.ProductId" />
+                            <input type="hidden" name="Items[@i].Name"         value="@item.Name" />
+                            <input type="hidden" name="Items[@i].Sku"          value="@item.Sku" />
+                            <input type="hidden" name="Items[@i].PriceAtOrder" value="@item.PriceAtOrder.ToString(System.Globalization.CultureInfo.InvariantCulture)" />
+                            <input type="hidden" name="Items[@i].UnitOfMeasure" value="@item.UnitOfMeasure" />
+                            <td>@item.Name</td>
+                            <td><code>@item.Sku</code></td>
+                            <td>@item.PriceAtOrder.ToString("C") / @item.UnitOfMeasure</td>
+                            <td>
+                                <input type="number" name="Items[@i].Quantity" value="@item.Quantity"
+                                       min="1" class="form-control form-control-sm qty-input"
+                                       data-price="@item.PriceAtOrder.ToString(System.Globalization.CultureInfo.InvariantCulture)"
+                                       data-row="@i" />
+                            </td>
+                            <td class="line-total" id="total-@i">@((item.PriceAtOrder * item.Quantity).ToString("C"))</td>
+                            <td>
+                                <div class="form-check">
+                                    <input type="checkbox" name="Items[@i].Remove" value="true"
+                                           class="form-check-input remove-check" data-row="@i" />
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4" class="text-end fw-semibold">Order Total:</td>
+                        <td colspan="2" class="fw-bold" id="order-total"></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2 mt-2">
+            <button type="submit" name="action" value="update" class="btn btn-secondary">Update Cart</button>
+            <button type="submit" name="action" value="place" class="btn btn-success">Place Order</button>
+        </div>
+    </form>
+}
+
+@section Scripts {
+<script>
+    function recalc() {
+        let orderTotal = 0;
+        document.querySelectorAll('.qty-input').forEach(input => {
+            const row = input.dataset.row;
+            const price = parseFloat(input.dataset.price);
+            const qty = parseInt(input.value) || 0;
+            const removed = document.querySelector(`.remove-check[data-row="${row}"]`)?.checked;
+            const lineTotal = removed ? 0 : price * qty;
+            const totalCell = document.getElementById(`total-${row}`);
+            if (totalCell) totalCell.textContent = removed ? '—' : '$' + lineTotal.toFixed(2);
+            document.getElementById(`row-${row}`).style.opacity = removed ? '0.4' : '1';
+            orderTotal += lineTotal;
+        });
+        document.getElementById('order-total').textContent = '$' + orderTotal.toFixed(2);
+    }
+
+    document.querySelectorAll('.qty-input, .remove-check').forEach(el => el.addEventListener('input', recalc));
+    recalc();
+</script>
+}

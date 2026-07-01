@@ -17,3 +17,5 @@ OrderId,PlacedAt,Role,ProductId,Name,SKU,Quantity,PriceAtOrder,UnitOfMeasure,Sta
 6,2026-07-01 14:27:47,Purchaser3,146,Brad Nailer,TLS-BRN-1800,1,419.88,Case,Approved,2026-07-01 14:28:25
 6,2026-07-01 14:27:47,Purchaser3,132,Tape Measure 25',TLS-TPM-2500,1,221.38,Each,Approved,2026-07-01 14:28:25
 6,2026-07-01 14:27:47,Purchaser3,152,Heat Gun,TLS-HTG-1000,1,140.24,Case,Approved,2026-07-01 14:28:25
+7,2026-07-01 14:55:19,Purchaser,290,Brick Hammer,CNC-BKH-1000,1,117.03,Pound,Pending,
+7,2026-07-01 14:55:19,Purchaser,281,Brick Mortar Color 1-lb,CNC-BMC-0100,1,78.41,Kilogram,Pending,

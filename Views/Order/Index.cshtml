@@ -67,10 +67,9 @@
     <div class="d-flex gap-2 align-items-center">
         @if ((int)(ViewData["OrderCount"] ?? 0) > 0)
         {
-            <span class="badge bg-primary fs-6">@ViewData["OrderCount"] item(s) in order</span>
-            <form method="post" asp-action="PlaceOrder" asp-controller="Order" class="d-inline">
-                <button type="submit" class="btn btn-success">Place Order</button>
-            </form>
+            <a asp-action="Cart" asp-controller="Order" class="btn btn-success">
+                View Cart <span class="badge bg-white text-success ms-1">@ViewData["OrderCount"]</span>
+            </a>
         }
         <a asp-controller="Home" asp-action="Dashboard" class="btn btn-outline-secondary">← Back</a>
     </div>

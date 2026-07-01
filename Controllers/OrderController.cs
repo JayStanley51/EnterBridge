@@ -62,8 +62,33 @@ namespace EnterBridgePOC.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public IActionResult Cart() =>
+            View(GetCart());
+
         [HttpPost]
-        public IActionResult PlaceOrder()
+        public IActionResult UpdateCart(Models.EditOrderViewModel vm, string action)
+        {
+            var items = vm.Items
+                .Where(i => !i.Remove && i.Quantity > 0)
+                .Select(i => new OrderItem
+                {
+                    ProductId = i.ProductId,
+                    Name = i.Name,
+                    Sku = i.Sku,
+                    PriceAtOrder = i.PriceAtOrder,
+                    UnitOfMeasure = i.UnitOfMeasure,
+                    Quantity = i.Quantity
+                }).ToList();
+
+            SaveCart(items);
+
+            return action == "place" ? SubmitOrder() : RedirectToAction(nameof(Cart));
+        }
+
+        [HttpPost]
+        public IActionResult PlaceOrder() => SubmitOrder();
+
+        private IActionResult SubmitOrder()
         {
             var cart = GetCart();
             if (cart.Count == 0) return RedirectToAction(nameof(Index));
