@@ -6,10 +6,13 @@
     bool isForeman = ViewData["Role"]?.ToString() == "Foreman";
 
     var activeOrders = isForeman
-        ? Model.Where(o => o.Status != EnterBridgePOC.Models.ApprovalStatus.Approved).ToList()
+        ? Model.Where(o => o.Status == EnterBridgePOC.Models.ApprovalStatus.Pending).ToList()
         : Model.ToList();
     var approvedOrders = isForeman
         ? Model.Where(o => o.Status == EnterBridgePOC.Models.ApprovalStatus.Approved).ToList()
+        : new List<EnterBridgePOC.Models.Order>();
+    var rejectedOrders = isForeman
+        ? Model.Where(o => o.Status == EnterBridgePOC.Models.ApprovalStatus.Rejected).ToList()
         : new List<EnterBridgePOC.Models.Order>();
 }
 
@@ -34,10 +37,10 @@
 }
 else
 {
-    @* ── Active orders ── *@
+    @* ── Pending orders ── *@
     @if (activeOrders.Count == 0)
     {
-        <p class="text-muted">No pending or rejected orders.</p>
+        <p class="text-muted">No pending orders.</p>
     }
     else
     {
@@ -63,6 +66,28 @@ else
             </button>
             <div class="collapse" id="approved-section">
                 @foreach (var order in approvedOrders)
+                {
+                    var collapseId = $"order-{orderIndex++}";
+                    @await Html.PartialAsync("_OrderRow", order, new ViewDataDictionary(ViewData) { ["CollapseId"] = collapseId, ["IsForeman"] = isForeman })
+                }
+            </div>
+        </div>
+    }
+
+    @* ── Rejected orders (Foreman only, collapsed by default) ── *@
+    @if (isForeman && rejectedOrders.Count > 0)
+    {
+        <div class="mt-4">
+            <button class="btn btn-light w-100 text-start d-flex justify-content-between align-items-center border"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#rejected-section"
+                    aria-expanded="false">
+                <span class="fw-semibold text-danger">Rejected Orders <span class="text-muted fw-normal fs-6">(@rejectedOrders.Count)</span></span>
+                <span class="chevron">▼</span>
+            </button>
+            <div class="collapse" id="rejected-section">
+                @foreach (var order in rejectedOrders)
                 {
                     var collapseId = $"order-{orderIndex++}";
                     @await Html.PartialAsync("_OrderRow", order, new ViewDataDictionary(ViewData) { ["CollapseId"] = collapseId, ["IsForeman"] = isForeman })

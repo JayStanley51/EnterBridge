@@ -7,10 +7,34 @@
 
 @section Scripts {
 <script>
+    const STORAGE_KEY = 'order-open-sections';
+
+    // Restore open sections saved before the last Add to Order submit
+    const saved = JSON.parse(sessionStorage.getItem(STORAGE_KEY) || '[]');
+    if (saved.length) {
+        saved.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) new bootstrap.Collapse(el, { show: true });
+        });
+        sessionStorage.removeItem(STORAGE_KEY);
+    }
+
+    // Track chevron state
     document.querySelectorAll('[data-bs-toggle="collapse"]').forEach(btn => {
         const target = document.querySelector(btn.dataset.bsTarget);
+        if (!target) return;
         target.addEventListener('show.bs.collapse', () => btn.querySelector('.chevron').textContent = '▲');
         target.addEventListener('hide.bs.collapse', () => btn.querySelector('.chevron').textContent = '▼');
+    });
+
+    // Before Add to Order submits, save which category collapses are open
+    document.querySelectorAll('form[action*="AddItem"]').forEach(form => {
+        form.addEventListener('submit', () => {
+            const open = [...document.querySelectorAll('.category-section .collapse.show')]
+                .map(el => el.id)
+                .filter(Boolean);
+            sessionStorage.setItem(STORAGE_KEY, JSON.stringify(open));
+        });
     });
 
     document.getElementById('skuSearch').addEventListener('input', function () {
