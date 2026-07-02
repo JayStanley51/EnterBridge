@@ -110,11 +110,13 @@ else
                                     <td>@product.Name</td>
                                     <td><code class="sku-cell">@product.Sku</code></td>
                                     <td class="text-end">
-                                        <form method="post" asp-action="AddItem" asp-controller="Order">
+                                        <form method="post" asp-action="AddItem" asp-controller="Order" class="d-flex align-items-center justify-content-end gap-2">
                                             <input type="hidden" name="productId" value="@product.Id" />
                                             <input type="hidden" name="name" value="@product.Name" />
                                             <input type="hidden" name="sku" value="@product.Sku" />
-                                            <button type="submit" class="btn btn-sm btn-primary">+ Add to Order</button>
+                                            <input type="number" name="quantity" value="1" min="1" max="999"
+                                                   class="form-control form-control-sm" style="width:70px" />
+                                            <button type="submit" class="btn btn-sm btn-primary">+ Add</button>
                                         </form>
                                     </td>
                                 </tr>

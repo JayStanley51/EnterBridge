@@ -1,21 +1,7 @@
 OrderId,PlacedAt,Role,ProductId,Name,SKU,Quantity,PriceAtOrder,UnitOfMeasure,Status,ReviewedAt
-1,2026-07-01 14:23:32,Purchaser,294,Anchor Bolts 1/2\x8\"",CNC-ACB-5208,1,157.8,Pound,Approved,2026-07-01 14:28:43
-1,2026-07-01 14:23:32,Purchaser,196,Adhesive Hooks,HDW-ADH-0300,1,36.24,Case,Approved,2026-07-01 14:28:43
-1,2026-07-01 14:23:32,Purchaser,389,Back Support Belt Large,OTH-BSB-L000,1,42.99,Case,Approved,2026-07-01 14:28:43
-2,2026-07-01 14:23:52,Purchaser,247,Bird Feeder,GDN-BRF-1000,1,109.01,Each,Pending,
-2,2026-07-01 14:23:52,Purchaser,7,Baltic Birch Plywood 3/4x4x8',LUM-BBP-3448,1,47.17,BoardFeet,Pending,
-2,2026-07-01 14:23:52,Purchaser,79,Closet Flange Spacer,PLM-CFS-1000,1,183.25,Meter,Pending,
-3,2026-07-01 14:27:01,Purchaser2,219,Adhesive Velcro Strips,HDW-VLC-1000,1,33.82,Box,Pending,
-3,2026-07-01 14:27:01,Purchaser2,216,Anti-Vibration Pads,HDW-AVP-0400,1,75.23,Each,Pending,
-3,2026-07-01 14:27:01,Purchaser2,193,Chain 3/16\ x 10'",HDW-CHN-31610,1,49.39,Case,Pending,
-4,2026-07-01 14:27:11,Purchaser2,183,Airless Paint Sprayer,PNT-APS-1000,1,63.24,Quart,Rejected,2026-07-01 14:28:30
-4,2026-07-01 14:27:11,Purchaser2,186,Anti-Slip Additive,PNT-ASA-1000,1,26.07,Quart,Rejected,2026-07-01 14:28:30
-4,2026-07-01 14:27:11,Purchaser2,184,Ceiling Paint 1-Gallon,PNT-CLP-1000,1,86.44,Gallon,Rejected,2026-07-01 14:28:30
-5,2026-07-01 14:27:33,Purchaser3,146,Brad Nailer,TLS-BRN-1800,1,419.88,Case,Pending,
-5,2026-07-01 14:27:33,Purchaser3,132,Tape Measure 25',TLS-TPM-2500,1,221.38,Each,Pending,
-5,2026-07-01 14:27:33,Purchaser3,152,Heat Gun,TLS-HTG-1000,1,140.24,Case,Pending,
-6,2026-07-01 14:27:47,Purchaser3,146,Brad Nailer,TLS-BRN-1800,1,419.88,Case,Approved,2026-07-01 14:28:25
-6,2026-07-01 14:27:47,Purchaser3,132,Tape Measure 25',TLS-TPM-2500,1,221.38,Each,Approved,2026-07-01 14:28:25
-6,2026-07-01 14:27:47,Purchaser3,152,Heat Gun,TLS-HTG-1000,1,140.24,Case,Approved,2026-07-01 14:28:25
-7,2026-07-01 14:55:19,Purchaser,290,Brick Hammer,CNC-BKH-1000,1,117.03,Pound,Pending,
-7,2026-07-01 14:55:19,Purchaser,281,Brick Mortar Color 1-lb,CNC-BMC-0100,1,78.41,Kilogram,Pending,
+1,2026-07-02 04:35:10,Purchaser,146,Brad Nailer,TLS-BRN-1800,1,419.88,Case,Pending,
+1,2026-07-02 04:35:10,Purchaser,294,"Anchor Bolts 1/2\x8\""""",CNC-ACB-5208,1,157.8,Pound,Pending,
+1,2026-07-02 04:35:10,Purchaser,275,"Brick 4\x2\""x8\""""",CNC-BRK-0428,2,37.23,Pound,Pending,
+2,2026-07-02 04:42:34,Purchaser,294,"Anchor Bolts 1/2\x8\""""",CNC-ACB-5208,7,157.8,Pound,Pending,
+3,2026-07-02 04:53:04,Purchaser,294,"Anchor Bolts 1/2\x8\""""",CNC-ACB-5208,2,157.8,Pound,Pending,
+4,2026-07-02 04:53:17,Purchaser,116,3-Way Switch,ELE-TWS-1500,3,113.02,Roll,Pending,

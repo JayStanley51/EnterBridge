@@ -28,13 +28,14 @@ namespace EnterBridgePOC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddItem(int productId, string name, string sku)
+        public async Task<IActionResult> AddItem(int productId, string name, string sku, int quantity = 1)
         {
+            if (quantity < 1) quantity = 1;
             var cart = GetCart();
             var existing = cart.FirstOrDefault(i => i.ProductId == productId);
             if (existing is not null)
             {
-                existing.Quantity++;
+                existing.Quantity += quantity;
             }
             else
             {
@@ -53,6 +54,7 @@ namespace EnterBridgePOC.Controllers
                     ProductId = productId,
                     Name = name,
                     Sku = sku,
+                    Quantity = quantity,
                     PriceAtOrder = latest?.Amount ?? 0,
                     UnitOfMeasure = latest?.UnitOfMeasure.ToString() ?? string.Empty
                 });
