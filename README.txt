@@ -15,8 +15,7 @@ After fulfilling the must have requirements, the next priority was the order rev
 they can approve, edit, reject all orders from the order history screen and there is a numbered indicator on their landing page to show them that there is orders waiting for approval as well.
 
 The second priority is making the frequently ordered products “easier” for this I added a reorder option from the purchasers’ order history with the ability to add or remove items as needed.
-There is room to enhance this further, but I need more information from the purchasers on item thresholds/frequency to build out a comprehensive list that can appear on the order page.
+I didn't have time to build out historical ordering data to build a "Common Purchase" section.
 
-The procurement manager’s price trends were the last priority. I gave them a simple percentage difference compared to the last three weeks of prices as a stop gap type MVP. To build this 
-feature out fully I would need more information about how they would like trends to be calculated(Length of time to compare etc..)
+The procurement manager’s price trends were the last priority. I would need more information about how they would like trends to be calculated and displayed (Historical Data back X amount of months, Graphs etc.)
 

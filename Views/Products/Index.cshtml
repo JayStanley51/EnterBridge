@@ -3,7 +3,6 @@
 @{
     ViewData["Title"] = "Products";
     int groupIndex = 0;
-    int productIndex = 0;
 }
 
 @section Scripts {
@@ -22,9 +21,6 @@
                 const sku = row.querySelector('.sku-cell')?.textContent.trim().toLowerCase() ?? '';
                 const match = !term || sku.includes(term);
                 row.style.display = match ? '' : 'none';
-                const priceRow = row.nextElementSibling;
-                if (priceRow && priceRow.classList.contains('collapse'))
-                    priceRow.style.display = match ? '' : 'none';
                 if (match) anyVisible = true;
             });
             section.style.display = anyVisible || !term ? '' : 'none';
@@ -72,47 +68,16 @@ else
                     <table class="table table-hover align-middle mb-0">
                         <thead class="table-dark">
                             <tr>
-                                <th style="width:2rem"></th>
                                 <th>Name</th>
                                 <th>SKU</th>
                                 <th>Description</th>
                                 <th>Latest Price</th>
-                                <th>Trend</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (var vm in group)
                             {
-                                var priceCollapseId = $"prices-{productIndex++}";
-
-                                string trendIcon = "—";
-                                string trendClass = "text-muted";
-                                string trendLabel = "";
-                                if (vm.Prices.Count >= 3)
-                                {
-                                    var newest = vm.Prices[0].Amount;
-                                    var oldest = vm.Prices[2].Amount;
-                                    var diff = newest - oldest;
-                                    var pct = oldest != 0 ? diff / oldest * 100 : 0;
-                                    trendLabel = $"{(diff >= 0 ? "+" : "")}{pct:F1}%";
-                                    if (diff > 0)      { trendIcon = "▲"; trendClass = "text-danger"; }
-                                    else if (diff < 0) { trendIcon = "▼"; trendClass = "text-success"; }
-                                    else               { trendIcon = "→"; trendClass = "text-muted"; }
-                                }
-
                                 <tr class="table-light product-row">
-                                    <td>
-                                        @if (vm.Prices.Count > 0)
-                                        {
-                                            <button class="btn btn-sm btn-outline-secondary py-0 px-1"
-                                                    type="button"
-                                                    data-bs-toggle="collapse"
-                                                    data-bs-target="#@priceCollapseId"
-                                                    aria-expanded="false">
-                                                <span class="chevron">▼</span>
-                                            </button>
-                                        }
-                                    </td>
                                     <td class="fw-semibold">@vm.Product.Name</td>
                                     <td><code class="sku-cell">@vm.Product.Sku</code></td>
                                     <td class="text-muted">@vm.Product.Description</td>
@@ -128,42 +93,7 @@ else
                                             <span class="text-muted">—</span>
                                         }
                                     </td>
-                                    <td class="@trendClass fw-semibold">
-                                        @trendIcon
-                                        @if (!string.IsNullOrEmpty(trendLabel))
-                                        {
-                                            <small class="fw-normal ms-1">@trendLabel</small>
-                                        }
-                                    </td>
                                 </tr>
-                                @if (vm.Prices.Count > 0)
-                                {
-                                    <tr class="collapse" id="@priceCollapseId">
-                                        <td colspan="6" class="p-0 ps-4 bg-white">
-                                            <table class="table table-sm table-striped mb-0">
-                                                <thead class="table-secondary">
-                                                    <tr>
-                                                        <th>Date</th>
-                                                        <th>Amount</th>
-                                                        <th>Quantity</th>
-                                                        <th>Unit</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach (var price in vm.Prices)
-                                                    {
-                                                        <tr>
-                                                            <td>@price.DateTime.ToString("yyyy-MM-dd")</td>
-                                                            <td>@price.Amount.ToString("C")</td>
-                                                            <td>@price.Quantity</td>
-                                                            <td>@price.UnitOfMeasure</td>
-                                                        </tr>
-                                                    }
-                                                </tbody>
-                                            </table>
-                                        </td>
-                                    </tr>
-                                }
                             }
                         </tbody>
                     </table>
